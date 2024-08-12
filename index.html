@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,52 +10,71 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="style.css">
 </head>
-<body contextmenu="return false"  class="snippet-body">
+<body contextmenu="return false" class="snippet-body">
     <div class="d-flex justify-content-center align-items-center container px-2">
         <div class="card">
-            <div class = "top d-flex flex-row align-items-center">
-            <h6 class="mb-0 mr-0">Type of fruit</h6> </div>
+            <div class="top d-flex flex-row align-items-center">
+                <h6 class="mb-0 mr-0">Type of fruit</h6>
+            </div>
 
-            <div class = "middle">
-               <img src=https://lh3.googleusercontent.com/drive-storage/AJQWtBNa4W1v3cPsnjdWIHG69bbyIVBGJ3MPTiy_XRl37EqGUYc4AEPitUMVL4d6lyvo-qOikHO918Wkubq0_kS0zkBpmNxA8hz-ZKq7iXc-MJVmvRA alt="" width="150">
+            <div class="middle">
+                <img src="https://images.pexels.com/photos/915016/pexels-photo-915016.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" width="150">
                 <h5>Pinapple Green Packham</h5>
                 <span>Each - approx 1.2KG</span>
             </div>
 
-            <div class = "bottom d-flex flex-row justify-content-center">
+            <div class="bottom d-flex flex-column align-items-center">
                 <div class="input-group mb-3">
-                    <span class = "input-group-text">+</span>
-                   <input type="text" class="form-control" value=" 1">
-                   <span class="input-group-text">-</span>
-
+                    <span class="input-group-text" id="increment">+</span>
+                    <input type="text" class="form-control" value="1" id="quantity">
+                    <span class="input-group-text" id="decrement">-</span>
                 </div>
-                <button class ="intaSendPayButton" data-amount="10" data-currency="KES"> Pay Now</button>
-
+                <h5>Total Price: KES <span id="totalPrice">10</span></h5>
+                <button class="intaSendPayButton" data-amount="10" data-currency="KES"> Pay Now</button>
             </div>
-
         </div>
-
     </div>
 
     <script>
+        const pricePerPineapple = 10;
+        const quantityInput = document.getElementById('quantity');
+        const totalPriceElement = document.getElementById('totalPrice');
+
+        function updateTotalPrice() {
+            const quantity = parseInt(quantityInput.value) || 1;
+            const totalPrice = quantity * pricePerPineapple;
+            totalPriceElement.textContent = totalPrice;
+        }
+
+        document.getElementById('increment').addEventListener('click', () => {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            updateTotalPrice();
+        });
+
+        document.getElementById('decrement').addEventListener('click', () => {
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+                updateTotalPrice();
+            }
+        });
+
+        quantityInput.addEventListener('input', updateTotalPrice);
+
         new window.IntaSend({
             publicAPIKey: "ISPubKey_test_ee5f4860-80fb-4670-a8ef-3258658af886",
             live: false,
         })
         .on("COMPLETE", (results) =>
-        console.log("Payment Succesful", results)
-    )
+            console.log("Payment Successful", results)
+        )
         .on("IN-PROGRESS", (results) =>
-        console.log("Payment Succesful", results)
-    )
+            console.log("Payment In Progress", results)
+        )
         .on("FAILED", (results) =>
-        console.log("Payment Succesful", results)
-    )
-
-
+            console.log("Payment Failed", results)
+        );
     </script>
-  
+
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
 </body>
 </html>
